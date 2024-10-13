@@ -11,19 +11,22 @@ music = False
 def set_reminder():
     global t_stamp 
     remind = simpledialog.askstring('Reminder time', 'Enter reminder\n(in 24 hour)', initialvalue="HH:MM")
-    if remind and len(remind) == 5 and ':' in remind:
-            try:
-                hour, minute = map(int, remind.split(':'))
-                now = datetime.datetime.now()
-                time_rem = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
-                if time_rem <= now:
-                    time_rem += datetime.timedelta(days=1)  
-                t_stamp = time_rem.timestamp()
-                lbl.config(text=f'Reminder set for {time_rem.strftime("%H:%M")}')
-            except ValueError as e:
-                messagebox.showerror('Error', f'Invalid time format: {e}')
-    elif remind:
-            messagebox.showerror('Error', 'Invalid time format. Please enter HH:MM.')
+    if remind:
+        time_str = remind.replace(' ', '').replace(':', '').replace('.', '').replace('-', '')
+        if len(time_str) == 4 and time_str.isdigit():
+            hour=int(time_str[:2])
+            minute = int(time_str[2:])
+            now = datetime.datetime.now()
+            time_rem = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+            if time_rem <= now:
+                time_rem += datetime.timedelta(days=1)  
+            t_stamp = time_rem.timestamp()
+            text = simpledialog.askstring('Reminder text',  '\t\tPlease enter reminder text\t\t\n\n\n')
+            lbl.config(text=f'Reminder set for\n{time_rem.strftime("%H:%M")}\n for {text}')
+        else:
+            messagebox.showerror('Error', 'Invalid time format. Please enter HHMM or HH:MM.')
+    else:
+        messagebox.showerror('Error', 'Invalid time format. Please enter HH:MM.')
 
 
 def check_reminder():
