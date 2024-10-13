@@ -3,7 +3,7 @@ from tkinter import messagebox
 from tkinter import simpledialog
 import datetime 
 import time
-# import pygame
+import pygame
 
 t_stamp = 0
 
@@ -31,6 +31,12 @@ def check():
             # play_sound()
             t_stamp = None
     root.after(10000, check)
+
+
+def play_sound():
+    pygame.mixer.init()
+    pygame.mixer.music.load(r'./music/Ariis - Funk Do Bounce.mp3')
+    pygame.mixer.music.play()
  
 root = tk.Tk()
 root.title('Reminder')
