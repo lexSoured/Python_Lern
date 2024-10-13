@@ -7,30 +7,32 @@ import pygame
 
 t_stamp = 0
 
-def set():
+def set_reminder():
     global t_stamp 
-    remind = simpledialog.askstring('Reminder time', 'Enter reminder time format HH:MM(#in 24 hour clock)')
-    if remind:
-        try:
-            hour = int(remind.split(':')[0])
-            minute = int(remind.split(':')[1])
-            now = datetime.datetime.now()
-            print(now)
-            time_rem = now.replace(hour=hour, minute=minute)
-            print(time_rem)
-            t_stamp = time_rem.timestamp()
-            print(time_rem)
-        except Exception as e:
-            messagebox.showerror('Error', {e})
+    remind = simpledialog.askstring('Reminder time', 'Enter reminder\n(in 24 hour)', initialvalue="HH:MM")
+    if remind and len(remind) == 5 and ':' in remind:
+            try:
+                hour, minute = map(int, remind.split(':'))
+                now = datetime.datetime.now()
+                time_rem = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+                if time_rem <= now:
+                    time_rem += datetime.timedelta(days=1)  
+                t_stamp = time_rem.timestamp()
+                messagebox.showinfo('Success', f'Reminder set for {time_rem.strftime("%H:%M")}')
+            except ValueError as e:
+                messagebox.showerror('Error', f'Invalid time format: {e}')
+    elif remind:
+            messagebox.showerror('Error', 'Invalid time format. Please enter HH:MM.')
 
-def check():
+
+def check_reminder():
     global t_stamp
     if t_stamp:
         now = time.time()
         if now >= t_stamp:
-            # play_sound()
+            play_sound()
             t_stamp = None
-    root.after(10000, check)
+    root.after(10000, check_reminder)
 
 
 def play_sound():
@@ -40,8 +42,14 @@ def play_sound():
  
 root = tk.Tk()
 root.title('Reminder')
-lbl = tk.Label(text='Add reminder')
+root.geometry('200x100') 
+root.update_idletasks() 
+
+lbl = tk.Label(text='Add Reminder', font=('Comic Sens', 16))
 lbl.pack(pady=10)
-set_btn = tk.Button(text='Add remender', command=set)
-set_btn.pack()
+set_btn = tk.Button(text='Set remender', font=('Comic Sens', 12), command=set_reminder)
+set_btn.pack(pady=10, ipadx=5, ipady=5)
+
+check_reminder()
+
 root.mainloop()
