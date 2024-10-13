@@ -19,7 +19,7 @@ def set_reminder():
                 if time_rem <= now:
                     time_rem += datetime.timedelta(days=1)  
                 t_stamp = time_rem.timestamp()
-                messagebox.showinfo('Success', f'Reminder set for {time_rem.strftime("%H:%M")}')
+                lbl.config(text=f'Reminder set for {time_rem.strftime("%H:%M")}')
             except ValueError as e:
                 messagebox.showerror('Error', f'Invalid time format: {e}')
     elif remind:
@@ -34,6 +34,7 @@ def check_reminder():
             play_sound()
             t_stamp = None
     root.after(10000, check_reminder)
+   
 
 
 def play_sound():
@@ -43,6 +44,7 @@ def play_sound():
     pygame.mixer.music.load(r'./music/Ariis - Funk Do Bounce.mp3')
     pygame.mixer.music.play()
 
+
 def stop_reminder():
     global music
     if music:
@@ -50,8 +52,7 @@ def stop_reminder():
          music = False
     lbl.config(text='Add new Reminder')
 
-     
- 
+
 root = tk.Tk()
 root.title('Reminder')
 x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
@@ -61,12 +62,11 @@ root.update_idletasks()
 
 lbl = tk.Label(text='Add Reminder', font=('Comic Sens', 16))
 lbl.pack(pady=10)
-set_btn = tk.Button(text='Set remender', font=('Comic Sens', 12), command=set_reminder)
-set_btn.pack(pady=10, ipadx=5, ipady=5)
+set_btn = tk.Button(text='Set remender', font=('Comic Sens', 12), width=15,command=set_reminder)
+set_btn.pack(pady=10, padx=50, ipady=5)
 
-stop_btn = tk.Button(text='Stop sound', font=('Comic Sens', 12), command=stop_reminder)
-stop_btn.pack(pady=10, ipadx=5, ipady=5)
-
+stop_btn = tk.Button(text='Stop sound', font=('Comic Sens', 12), width=15,command=stop_reminder)
+stop_btn.pack(pady=10, padx=50,  ipady=5)
 
 check_reminder()
 
