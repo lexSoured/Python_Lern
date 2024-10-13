@@ -4,6 +4,8 @@ from tkinter import simpledialog
 import datetime 
 import time
 import pygame
+import os
+import sys
 
 # Инициализация глобальных переменных
 t_stamp = 0  # Временная метка для напоминания
@@ -55,14 +57,29 @@ def check_reminder():
     # Повторная проверка через 10 секунд
     root.after(10000, check_reminder)
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 def play_sound():
     global music
     music = True
+    try:
     # Инициализация модуля pygame для воспроизведения звука
-    pygame.mixer.init()
-    # Загрузка и воспроизведение музыкального файла
-    pygame.mixer.music.load(r'./music/Ariis - Funk Do Bounce.mp3')
-    pygame.mixer.music.play()
+        pygame.mixer.init()
+        # Загрузка и воспроизведение музыкального файла
+        pygame.mixer.music.load(resource_path('./music/Ariis - Funk Do Bounce.mp3'))
+        pygame.mixer.music.play()
+    except pygame.error as e:
+        messagebox.showerror('Error', f'Failed to play sound: {e}')
+    except Exception as e:
+        messagebox.showerror('Error', f'An unexpected error occurred: {e}')
 
 def stop_reminder():
     global music
