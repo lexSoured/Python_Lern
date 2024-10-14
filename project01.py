@@ -44,6 +44,7 @@ def set_reminder():
     else:
         messagebox.showerror('Error', 'Invalid time format. Please enter HH:MM.')
 
+
 def check_reminder():
     global t_stamp
     if t_stamp:
@@ -57,6 +58,7 @@ def check_reminder():
     # Повторная проверка через 10 секунд
     root.after(10000, check_reminder)
 
+
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
@@ -64,8 +66,8 @@ def resource_path(relative_path):
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
-
     return os.path.join(base_path, relative_path)
+
 
 def play_sound():
     global music
@@ -81,6 +83,7 @@ def play_sound():
     except Exception as e:
         messagebox.showerror('Error', f'An unexpected error occurred: {e}')
 
+
 def stop_reminder():
     global music
     if music:
@@ -89,6 +92,7 @@ def stop_reminder():
         music = False
     # Обновление текста метки
     lbl.config(text='Add new Reminder')
+
 
 def show_custom_messagebox():
     # Создание нового окна
@@ -99,7 +103,6 @@ def show_custom_messagebox():
     # Создание метки с текстом напоминания
     label = tk.Label(top, text=reminder_text, bg='lightgreen', bd=2,  font=('Arial', 12, 'bold'))
     label.pack(padx=20, pady=20)
-
     # Создание кнопки для закрытия окна
     ok_button = tk.Button(top, text='OK', bg='#00d700',  activebackground='#008040', 	activeforeground='#ffffcc',  font=('Comic Sens MS', 12, 'bold'), width=15, command=top.destroy)
     ok_button.pack(side=tk.LEFT, pady=10, padx=50, ipady=5)
@@ -110,7 +113,6 @@ def show_custom_messagebox():
 # Создание главного окна приложения
 root = tk.Tk()
 root.title('Reminder')
-# root.withdraw()  
 
 # Центрирование окна на экране
 x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
