@@ -15,7 +15,7 @@ reminder_text = ""  # Текст напоминания
 def set_reminder():
     global t_stamp, reminder_text
     # Запрос времени напоминания у пользователя
-    remind = simpledialog.askstring('Reminder time', 'Enter reminder\n(in 24 hour)', initialvalue="HH:MM")
+    remind = simpledialog.askstring('Reminder time', 'Enter reminder\n(in 24 hour)', initialvalue="HH:MM", parent=root)
     if remind:
         # Удаление всех символов, кроме цифр
         time_str = remind.replace(' ', '').replace(':', '').replace('.', '').replace('-', '').replace('/', '')
@@ -31,7 +31,7 @@ def set_reminder():
                 time_rem += datetime.timedelta(days=1)  
             t_stamp = time_rem.timestamp()
             # Запрос текста напоминания у пользователя
-            text = simpledialog.askstring('Reminder text',  '\t\tPlease enter reminder text:\t\t\n\n\n')
+            text = simpledialog.askstring('Reminder text',  'Please enter reminder text: ', initialvalue='Reminder text', parent=root)
             if text:
                 reminder_text = text
                 # Обновление текста метки с информацией о напоминании
@@ -75,7 +75,7 @@ def play_sound():
         pygame.mixer.init()
         # Загрузка и воспроизведение музыкального файла
         pygame.mixer.music.load(resource_path('./music/Ariis - Funk Do Bounce.mp3'))
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(loops=3)
     except pygame.error as e:
         messagebox.showerror('Error', f'Failed to play sound: {e}')
     except Exception as e:
@@ -92,24 +92,25 @@ def stop_reminder():
 
 def show_custom_messagebox():
     # Создание нового окна
-    top = tk.Toplevel(root)
+    top = tk.Toplevel(root, bg='lightgreen')
     top.title('Your Reminder')
-    top.attributes('-topmost', True)  # Установка окна поверх всех других
-
+    top.attributes('-topmost', True, '-alpha', 0.7)  # Установка окна поверх всех других
+    top.focus_set()
     # Создание метки с текстом напоминания
-    label = tk.Label(top, text=reminder_text)
+    label = tk.Label(top, text=reminder_text, bg='lightgreen', bd=2,  font=('Arial', 12, 'bold'))
     label.pack(padx=20, pady=20)
 
     # Создание кнопки для закрытия окна
-    ok_button = tk.Button(top, text='OK', font=('Comic Sens MS', 12), width=15, command=top.destroy)
+    ok_button = tk.Button(top, text='OK', bg='#00d700',  activebackground='#008040', 	activeforeground='#ffffcc',  font=('Comic Sens MS', 12, 'bold'), width=15, command=top.destroy)
     ok_button.pack(side=tk.LEFT, pady=10, padx=50, ipady=5)
-    stop_btn = tk.Button(top, text='Stop sound', font=('Comic Sens MS', 12), width=15, command=stop_reminder)
+    stop_btn = tk.Button(top, text='Stop sound', bg='#00d700',  activebackground='#008040', 	activeforeground='#ffffcc', font=('Comic Sens MS', 12, 'bold'), width=15, command=stop_reminder)
     stop_btn.pack(side=tk.LEFT, pady=10, padx=50, ipady=5)
    
 
 # Создание главного окна приложения
 root = tk.Tk()
 root.title('Reminder')
+# root.withdraw()  
 
 # Центрирование окна на экране
 x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
@@ -126,8 +127,8 @@ set_btn = tk.Button(text='Set Reminder', font=('Comic Sens MS', 12), width=15, c
 set_btn.pack(pady=10, padx=50, ipady=5)
 
 # Создание и размещение кнопки для остановки звука
-stop_btn = tk.Button(text='Stop sound', font=('Comic Sens MS', 12), width=15, command=stop_reminder)
-stop_btn.pack(pady=10, padx=50, ipady=5)
+# stop_btn = tk.Button(text='Stop sound', font=('Comic Sens MS', 12), width=15, command=stop_reminder)
+# stop_btn.pack(pady=10, padx=50, ipady=5)
 
 # Запуск цикла проверки напоминаний
 check_reminder()
